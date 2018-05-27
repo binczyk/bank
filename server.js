@@ -246,7 +246,8 @@ httpServer.on('request', function (req, rep) {
                                         after: docr.balance + transfer.amount,
                                         title: transfer.title
                                     });
-                                    unicast(session, transfer.recipient, "success", "New transfer from " + sessions[session].login + " has just arrived");
+                                    unicast(session, transfer.recipient, "success", "New transfer from "
+                                        + -[session].login + " has just arrived: " + transfer.title);
                                     rep.writeHead(200, 'OK', {"Content-type": "application/json"});
                                     rep.end(JSON.stringify(doc));
                                 });
