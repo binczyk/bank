@@ -215,7 +215,6 @@ httpServer.on('request', function (req, rep) {
                                 }
 
                                 doc.balance -= transfer.amount;
-
                                 if (doc.balance < doc.limit) {
                                     rep.writeHead(406, 'Not acceptable', {"Content-type": "application/json"});
                                     rep.end(JSON.stringify({err: "Limit exceeded"}));
@@ -301,6 +300,28 @@ httpServer.on('request', function (req, rep) {
                         {$unwind: {path: "$account2"}},
                         {$addFields: {account2: "$account2.login"}}
                     ]).toArray(function (err, docs) {
+                        rep.writeHead(200, 'OK', {"Content-type": "application/json"});
+                        rep.end(JSON.stringify(docs));
+                    });
+
+                }
+                else if (/^\/accounts\//.test(req.url)) {
+
+                    if (!session || !sessions[session] || !sessions[session].login || !sessions[session].account) {
+                        rep.writeHead(401, 'Auth required', {"Content-type": "application/json"});
+                        rep.end(JSON.stringify({error: 'Not logged in'}));
+                        break;
+                    }
+
+                    var p = req.url.split("/");
+                    var nSkip = parseInt(p[2]);
+                    if (isNaN(nSkip)) nSkip = 0;
+                    var nLimit = parseInt(p[3]);
+                    if (isNaN(nLimit)) nLimit = 999999;
+                    accounts.aggregate([
+                        {$sort: {login: 1}},
+                        {$skip: nSkip},
+                        {$limit: nLimit}]).toArray(function (err, docs) {
                         rep.writeHead(200, 'OK', {"Content-type": "application/json"});
                         rep.end(JSON.stringify(docs));
                     });

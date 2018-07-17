@@ -1,0 +1,37 @@
+<div class="row col-xs-12">
+
+    <h1>Users</h1>
+
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            Available users
+        </div>
+
+        <div class="panel-body">
+
+            <table class="table table-stripped table-hover">
+                <tr>
+                    <th>Login</th>
+                    <th>Password</th>
+                    <th>Role</th>
+                    <th>Limit</th>
+                </tr>
+                <tr ng-repeat="operation in ctrl.users">
+                    <td ng-bind="ctrl.login"></td>
+                    <td ng-bind="operation.passoword"></td>
+                    <td ng-bind="operation.role" align="right"></td>
+                    <td ng-bind="operation.limit" align="right"></td>
+                </tr>
+            </table>
+
+        </div>
+
+        <div class="panel-footer text-center">
+            Total number of users: <span ng-bind="ctrl.numberOfUsers"></span>
+        </div>
+
+    </div>
+</div>
+
+
