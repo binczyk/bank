@@ -14,17 +14,17 @@
                 <tr>
                     <th>Date</th>
                     <th>Account</th>
-                    <th align="right">Title</th>
-                    <th align="right">Amount</th>
-                    <th align="right">Balance after</th>
+                    <th>Title</th>
+                    <th>Amount</th>
+                    <th>Balance after</th>
                 </tr>
                 <tr ng-repeat="operation in ctrl.history" ng-class="operation.amount > 0 ? 'success' : 'danger' ">
                     <td ng-bind="ctrl.common.dateFormat(operation.date)"></td>
                     <td ng-bind="operation.account2"></td>
-                    <td ng-bind="operation.title" align="right" ng-if="operation.title"></td>
+                    <td ng-bind="operation.title" ng-if="operation.title"></td>
                     <td align="right" ng-if="!operation.title">Empty</td>
-                    <td ng-bind="operation.amount" align="right"></td>
-                    <td ng-bind="operation.after" align="right"></td>
+                    <td ng-bind="operation.amount"></td>
+                    <td ng-bind="operation.after"></td>
                 </tr>
             </table>
 
