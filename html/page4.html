@@ -13,15 +13,13 @@
             <table class="table table-stripped table-hover">
                 <tr>
                     <th>Login</th>
-                    <th>Password</th>
                     <th>Role</th>
                     <th>Limit</th>
                 </tr>
-                <tr ng-repeat="operation in ctrl.users">
-                    <td ng-bind="ctrl.login"></td>
-                    <td ng-bind="operation.passoword"></td>
-                    <td ng-bind="operation.role" align="right"></td>
-                    <td ng-bind="operation.limit" align="right"></td>
+                <tr ng-repeat="operation in ctrl.account">
+                    <td ng-bind="operation.login"></td>
+                    <td ng-bind="operation.role"></td>
+                    <td ng-bind="operation.limit"></td>
                 </tr>
             </table>
 

@@ -29,7 +29,7 @@ app.controller("Page4", ["$http", "common", function ($http, common) {
         ctrl.getAccounts();
     };
 
-    $http.get("/account").then(
+    $http.get("/accounts/").then(
         function (rep) {
             ctrl.numberOfUsers = rep.data.length;
         },

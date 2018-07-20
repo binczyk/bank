@@ -43,7 +43,7 @@ app.config(['$routeProvider', 'routes', function ($routeProvider, routes) {
 
 app.controller('Menu', ['$http', '$location', '$window', '$timeout', '$cookies', 'routes', 'globals', 'ws',
     function ($http, $location, $window, $timeout, $cookies, routes, globals, ws) {
-
+        console.log("#################app.controller");
         var ctrl = this;
 
         ws.init($cookies.session);
@@ -118,6 +118,7 @@ app.controller('Menu', ['$http', '$location', '$window', '$timeout', '$cookies',
             ctrl.alert.type = 'info';
             ctrl.alert.from = '';
             ctrl.alert.message = '';
+            console.log("###########################ctrl.closeAlert");
         };
 
         ctrl.alert = globals.alert;
