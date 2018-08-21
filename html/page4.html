@@ -10,17 +10,20 @@
 
         <div class="panel-body">
 
-            <table class="table table-stripped table-hover">
+            <table class="table table-stripped table-hover" ng-table="vm.tableParams" show-filter="true">
                 <tr>
                     <th>Login</th>
                     <th>Role</th>
                     <th>Limit</th>
+                    <th>Edit</th>
                 </tr>
                 <tr ng-repeat="operation in ctrl.account">
                     <td ng-bind="operation.login"></td>
                     <td ng-bind="operation.role"></td>
                     <td ng-bind="operation.limit"></td>
+                    <td></td>
                 </tr>
+
             </table>
 
         </div>

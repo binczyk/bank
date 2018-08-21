@@ -298,7 +298,40 @@ httpServer.on('request', function (req, rep) {
 
                       default:
 
-                          if (/^\/history\//.test(req.url)) {
+                          if (/^\/history\/between\//.test(req.url)) {
+                              if (!session || !sessions[session] || !sessions[session].login || !sessions[session].account) {
+                                  rep.writeHead(401, 'Auth required', {"Content-type": "application/json"});
+                                  rep.end(JSON.stringify({error: 'Not logged in'}));
+                                  break;
+                              }
+
+                              var p = req.url.split("/");
+                              var from = p[3];
+                              if (!from) {
+                                  from = new Date();
+                              }
+                              var to = p[4];
+                              if (!to) {
+                                  to = new Date();
+                              }
+                              transactions.aggregate([
+                                                         {
+                                                             $match: {
+                                                                 $and: [{account: sessions[session].account},
+                                                                     {date: {$gte: new Date(from), $lte: new Date(to)}}]
+                                                             }
+                                                         },
+                                                         {$sort: {date: -1}},
+                                                         {$lookup: {from: "accounts", localField: "account2", foreignField: "_id", as: "account2"}},
+                                                         {$unwind: {path: "$account2"}},
+                                                         {$addFields: {account2: "$account2.login"}}
+                                                     ]).toArray(function (err, docs) {
+                                  rep.writeHead(200, 'OK', {"Content-type": "application/json"});
+                                  rep.end(JSON.stringify(docs));
+                              });
+
+                          }
+                          else if (/^\/history\//.test(req.url)) {
 
                               if (!session || !sessions[session] || !sessions[session].login || !sessions[session].account) {
                                   rep.writeHead(401, 'Auth required', {"Content-type": "application/json"});

@@ -1,8 +1,19 @@
 <div class="row col-xs-12">
 
-	<h1>Chart</h1>
+    <h1>Chart</h1>
 
-	<nvd3 options="ctrl.options" data="ctrl.data" class="with-3d-shadow with-transitions"></nvd3>
+    <div class="text-center">
+        <form align="center" class="form-inline" ng-submit="ctrl.filter()">
+            <label for="dateFrom">From:</label>
+            <input id="dateFrom" class="form-control" type="date" ng-model="ctrl.dateFrom"/>
+            <label for="dateTo">To:</label>
+            <input id="dateTo" class="form-control" type="date" ng-model="ctrl.dateTo"/>
+            <button type="submit" class="btn btn-primary" ng-disabled="ctrl.dateFrom == null && ctrl.dateTo == null">Filter</button>
+            <button type="button" class="btn btn-primary" ng-click="ctrl.clear()">Clear</button>
+        </form>
+
+    </div>
+    <nvd3 options="ctrl.options " data="ctrl.data" class="with-3d-shadow with-transitions"></nvd3>
 
 </div>
 
