@@ -280,7 +280,25 @@ httpServer.on('request', function (req, rep) {
 
                           }
                           break;
+                      case '/recent':
+                          if (!session || !sessions[session] || !sessions[session].login || !sessions[session].account) {
+                              rep.writeHead(401, 'Auth required', {"Content-type": "application/json"});
+                              rep.end(JSON.stringify({error: 'Not logged in'}));
+                              break;
+                          }
 
+                          transactions.aggregate([
+                                                     {$match: {account: sessions[session].account}},
+                                                     {$lookup: {from: "accounts", localField: "account2", foreignField: "_id", as: "account2"}},
+                                                     {$unwind: {path: "$account2"}},
+                                                     {$group: {_id: "$account2.login"}},
+                                                     {$sort: {_id: 1}}
+                                                 ]).toArray(function (err, docs) {
+                              rep.writeHead(200, 'OK', {"Content-type": "application/json"});
+                              rep.end(JSON.stringify(docs));
+                          });
+
+                          break;
                       case '/history':
 
                           if (!session || !sessions[session] || !sessions[session].login || !sessions[session].account) {

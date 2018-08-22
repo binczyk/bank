@@ -6,10 +6,17 @@ app.controller("Page1", ["$http", "globals",
                              ctrl.recipient = '';
                              ctrl.amount = 0;
                              ctrl.title = '';
+                             ctrl.recentRecipients = [];
 
                              $http.get("/account").then(function (rep) {
                                  ctrl.balance = rep.data.balance;
                                  ctrl.limit = rep.data.limit;
+                             });
+
+                             $http.get("/recent").then(function (rep) {
+                                 for (var itr in rep.data) {
+                                     ctrl.recentRecipients[itr] = rep.data[itr]._id;
+                                 }
                              });
 
                              ctrl.transfer = function () {
@@ -30,6 +37,6 @@ app.controller("Page1", ["$http", "globals",
                                              globals.alert.message = ctrl.title + ' transfer failed: ' + err.data.err;
                                          }
                                  );
-                             }
+                             };
                          }
 ]);
