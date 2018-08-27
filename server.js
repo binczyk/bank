@@ -26,13 +26,15 @@ const exampleAccounts = [
         "login": "adam",
         "password": "adam1",
         "balance": 500,
-        "limit": -100
+        "limit": -100,
+        "role": "employee"
     },
     {
         "login": "bob",
         "password": "bob1",
         "balance": 200,
-        "limit": 0
+        "limit": 0,
+        "role": "employee"
     }
 ];
 
@@ -128,7 +130,11 @@ httpServer.on('request', function (req, rep) {
 
                               case 'GET':
                                   rep.writeHead(200, 'ok', {"Content-type": "application/json"});
-                                  rep.write(JSON.stringify({login: sessions[session] && sessions[session].login ? sessions[session].login : ''}));
+                                  rep.write(JSON.stringify({
+                                                               login: sessions[session] && sessions[session].login ? sessions[session].login : '',
+                                                               userRole: sessions[session] && sessions[session].userRole ? sessions[session].userRole : ''
+                                                           }
+                                  ));
                                   rep.end();
                                   break;
 
@@ -155,12 +161,16 @@ httpServer.on('request', function (req, rep) {
                                               rep.end(JSON.stringify({err: 'Login failed'}));
                                           } else {
                                               sessions[session].login = creds.login;
+                                              sessions[session].userRole = doc.role;
                                               sessions[session].account = doc._id;
                                               if (debugLog) {
                                                   console.log(' ' + JSON.stringify(sessions[session]));
                                               }
                                               rep.writeHead(200, 'OK', {"Content-type": "application/json"});
-                                              rep.end(JSON.stringify({login: sessions[session] && sessions[session].login ? sessions[session].login : ''}));
+                                              rep.end(JSON.stringify({
+                                                                         login: sessions[session] && sessions[session].login ? sessions[session].login : '',
+                                                                         role: sessions[session] && sessions[session].userRole ? sessions[session].userRole : ''
+                                                                     }));
                                           }
                                       });
                                   });
@@ -168,6 +178,7 @@ httpServer.on('request', function (req, rep) {
 
                               case 'DELETE':
                                   delete sessions[session].login;
+                                  delete sessions[session].role;
                                   delete sessions[session].account;
                                   rep.writeHead(200, 'OK', {"Content-type": "application/json"});
                                   rep.end(JSON.stringify({login: ''}));
