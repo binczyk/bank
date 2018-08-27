@@ -99,7 +99,7 @@ app.controller('Menu', ['$http', '$location', '$window', '$timeout', '$cookies',
                                 $timeout(function () {
                                     $window.location.href = '/#/';
                                 }, 2000);
-                            }
+                            };
 
                             ctrl.validateCredentials = function () {
                                 $http.post('/user', {login: ctrl.login, password: ctrl.password}).then(
