@@ -1,5 +1,5 @@
-app.controller("Page1", ["$http", "globals",
-                         function ($http, globals) {
+app.controller("Page1", ["$http", "globals", "$scope",
+                         function ($http, globals, $scope) {
                              var ctrl = this;
                              ctrl.balance = 0;
                              ctrl.limit = 0;
@@ -38,5 +38,18 @@ app.controller("Page1", ["$http", "globals",
                                          }
                                  );
                              };
+
+                             $scope.$on("update", function () {
+                                 $http.get("/account").then(function (rep) {
+                                     ctrl.balance = rep.data.balance;
+                                     ctrl.limit = rep.data.limit;
+                                 });
+
+                                 $http.get("/recent").then(function (rep) {
+                                     for (var itr in rep.data) {
+                                         ctrl.recentRecipients[itr] = rep.data[itr]._id;
+                                     }
+                                 });
+                             });
                          }
 ]);

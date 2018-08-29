@@ -1,4 +1,4 @@
-app.controller("Page2", ["$http", "common", function ($http, common) {
+app.controller("Page2", ["$http", "common", "$scope", function ($http, common, $scope) {
 
     var ctrl = this;
 
@@ -39,5 +39,9 @@ app.controller("Page2", ["$http", "common", function ($http, common) {
     );
 
     ctrl.getHistory();
+
+    $scope.$on("update", function () {
+        ctrl.getHistory();
+    });
 }
 ]);
