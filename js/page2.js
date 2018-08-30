@@ -42,6 +42,7 @@ app.controller("Page2", ["$http", "common", "$scope", function ($http, common, $
 
     $scope.$on("update", function () {
         ctrl.getHistory();
+        ctrl.nAll++;
     });
 }
 ]);

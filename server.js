@@ -231,7 +231,7 @@ httpServer.on('request', function (req, rep) {
                                           rep.end(JSON.stringify({err: "Data corrupted"}));
                                           return;
                                       }
-                                      accounts.findOne({_id: sessions[session].account}, function (err, doc) {
+                                      accounts.findOne({_id: sessions[session].account, role: "client"}, function (err, doc) {
 
                                           if (!transfer.recipient || transfer.recipient == sessions[session].login) {
                                               rep.writeHead(406, 'Not acceptable', {"Content-type": "application/json"});
@@ -252,7 +252,7 @@ httpServer.on('request', function (req, rep) {
                                               return;
                                           }
 
-                                          accounts.findOne({login: transfer.recipient}, function (err, docr) {
+                                          accounts.findOne({login: transfer.recipient, role: "client"}, function (err, docr) {
                                               if (err || !docr) {
                                                   rep.writeHead(406, 'Not acceptable', {"Content-type": "application/json"});
                                                   rep.end(JSON.stringify({err: "No such recipient " + transfer.recipient + " found"}));
