@@ -53,9 +53,9 @@ app.controller("Page3", ["$http", "common", function ($http, common) {
         $http.get('/account').then(function (rep) {
             ctrl.data[0].values.unshift({date: new Date().toString(), after: rep.data.balance});
         });
-        ctrl.minDate = ctrl.data[0].values[0].date.toISOString().split('T')[0];
-        var lastValue = ctrl.data[0].values.length - 1;
-        ctrl.maxDate = ctrl.data[0].values[lastValue].date.toISOString().split('T')[0];
+        /* ctrl.minDate = ctrl.data[0].values[0].date.toISOString().split('T')[0];
+         var lastValue = ctrl.data[0].values.length - 1;
+         ctrl.maxDate = ctrl.data[0].values[lastValue].date.toISOString().split('T')[0];*/
     });
 
     ctrl.filter = function () {

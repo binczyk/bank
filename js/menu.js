@@ -16,7 +16,7 @@ app.constant('routes', [
         controllerAs: 'ctrl',
         menu: 'History',
         onlyLogged: true,
-        role: ["client", "employee"]
+        role: ["client"]
     },
     {
         route: '/3',
@@ -25,7 +25,7 @@ app.constant('routes', [
         controllerAs: 'ctrl',
         menu: 'Chart',
         onlyLogged: true,
-        role: ["client", "employee"]
+        role: ["client"]
     },
     {
         route: '/4',
