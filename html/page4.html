@@ -17,13 +17,32 @@
                     <th>Limit</th>
                     <th>Edit</th>
                 </tr>
-                <tr ng-repeat="operation in ctrl.account">
-                    <td ng-bind="operation.login"></td>
-                    <td ng-bind="operation.role"></td>
-                    <td ng-bind="operation.limit"></td>
-                    <td></td>
+                <tr ng-repeat="userAccount in ctrl.account">
+                    <td>
+                        <div ng-hide="ctrl.inEdit[$index]">{{userAccount.login}}</div>
+                        <div ng-show="ctrl.inEdit[$index]">
+                            <input class="form-control" type="text" ng-model="ctrl.newLogin" required="" placeholder="{{userAccount.login}}">
+                        </div>
+                    </td>
+                    <td>
+                        <div>{{userAccount.role}}</div>
+                    </td>
+                    <td>
+                        <div ng-hide="ctrl.inEdit[$index]">{{userAccount.limit}}</div>
+                        <div ng-show="ctrl.inEdit[$index]">
+                            <input class="form-control" type="number" ng-model="ctrl.newLimit" required="" placeholder="{{userAccount.limit}}">
+                        </div>
+                    </td>
+                    <td>
+                        <div ng-hide="ctrl.inEdit[$index]">
+                            <button class="btn btn-primary glyphicon glyphicon-edit" ng-click="ctrl.editUserAccount($index, userAccount)"/>
+                        </div>
+                        <div ng-show="ctrl.inEdit[$index]">
+                            <button class="btn btn-primary glyphicon glyphicon-save" ng-click="ctrl.save($index, userAccount._id)"/>
+                            <button class="btn btn-primary glyphicon glyphicon-circle-arrow-left" ng-click="ctrl.cancel($index)"/>
+                        </div>
+                    </td>
                 </tr>
-
             </table>
 
         </div>
@@ -32,7 +51,9 @@
             Total number of users: <span ng-bind="ctrl.numberOfUsers"></span>
         </div>
 
+
     </div>
+    <button class="btn btn-primary">Add new user</button>
 </div>
 
 

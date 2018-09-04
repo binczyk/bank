@@ -191,8 +191,50 @@ httpServer.on('request', function (req, rep) {
 
                           }
                           break;
+                      case  '/account/update/':
+                          if (!session || !sessions[session] || !sessions[session].login || !sessions[session].account) {
+                              rep.writeHead(401, 'Auth required', {"Content-type": "application/json"});
+                              rep.end(JSON.stringify({error: 'Not logged in'}));
+                              break;
+                          }
 
-                      case '/account':
+                          var data = '';
+                          req.setEncoding('utf8');
+                          req.on('data', function (portion) {
+                              data += portion;
+                          }).on('end', function () {
+                              if (debugLog) {
+                                  console.log("Update: " + data);
+                              }
+                              var editedUser = null;
+                              try {
+                                  editedUser = JSON.parse(data);
+                              } catch (ex) {
+                                  rep.writeHead(406, 'Not acceptable', {"Content-type": "application/json"});
+                                  rep.end(JSON.stringify({err: "Data corrupted"}));
+                                  return;
+                              }
+                              try {
+                                  accounts.findOneAndUpdate({_id: ObjectId(editedUser.userId)}, {
+                                      $set: {
+                                          login: editedUser.newLogin,
+                                          limit: editedUser.newLimit
+                                      }
+                                  });
+
+                                  rep.writeHead(200, 'OK', {"Content-type": "application/json"});
+                                  rep.end(JSON.stringify({status: "ok"}));
+                              } catch (ex) {
+                                  rep.writeHead(406, 'Not acceptable', {"Content-type": "application/json"});
+                                  rep.end(JSON.stringify({err: "Data corrupted"}));
+                                  return;
+                              }
+                          });
+
+                          break;
+
+                      case
+                      '/account':
 
                           console.log(JSON.stringify(sessions));
 
@@ -291,7 +333,9 @@ httpServer.on('request', function (req, rep) {
 
                           }
                           break;
-                      case '/recent':
+                      case
+                      '/recent'
+                      :
                           if (!session || !sessions[session] || !sessions[session].login || !sessions[session].account) {
                               rep.writeHead(401, 'Auth required', {"Content-type": "application/json"});
                               rep.end(JSON.stringify({error: 'Not logged in'}));
@@ -310,7 +354,9 @@ httpServer.on('request', function (req, rep) {
                           });
 
                           break;
-                      case '/history':
+                      case
+                      '/history'
+                      :
 
                           if (!session || !sessions[session] || !sessions[session].login || !sessions[session].account) {
                               rep.writeHead(401, 'Auth required', {"Content-type": "application/json"});
@@ -326,7 +372,6 @@ httpServer.on('request', function (req, rep) {
                           break;
 
                       default:
-
                           if (/^\/history\/between\//.test(req.url)) {
                               if (!session || !sessions[session] || !sessions[session].login || !sessions[session].account) {
                                   rep.writeHead(401, 'Auth required', {"Content-type": "application/json"});
