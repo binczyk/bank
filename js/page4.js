@@ -13,6 +13,8 @@ app.controller("Page4", ["$http", "common", "globals", function ($http, common, 
     ctrl.newPassword = "";
     ctrl.newRole = "";
 
+    ctrl.editedLogin = [];
+    ctrl.editedLimit = [];
     ctrl.inEdit = [];
 
     ctrl.getAccounts = function () {
@@ -55,8 +57,8 @@ app.controller("Page4", ["$http", "common", "globals", function ($http, common, 
 
     ctrl.editUserAccount = function (index, userAccount) {
         ctrl.inEdit[index] = true;
-        ctrl.newLogin = userAccount.login;
-        ctrl.newLimit = userAccount.limit;
+        ctrl.editedLogin[index] = userAccount.login;
+        ctrl.editedLimit[index] = userAccount.limit;
     };
 
     ctrl.save = function (index, userId) {
@@ -64,8 +66,8 @@ app.controller("Page4", ["$http", "common", "globals", function ($http, common, 
 
         $http.post('/account/update/', {
             userId: userId,
-            newLogin: ctrl.newLogin,
-            newLimit: ctrl.newLimit
+            newLogin: ctrl.editedLogin[index],
+            newLimit: ctrl.editedLimit[index]
         }).then(function (rep) {
                     ctrl.getAccounts();
                     globals.alert.message = 'Operation successfully';
@@ -112,6 +114,10 @@ app.controller("Page4", ["$http", "common", "globals", function ($http, common, 
 
     ctrl.disableLimit = function () {
         return ctrl.newRole === "" || ctrl.newRole === "employee";
+    };
+
+    ctrl.disableLimit = function (role) {
+        return role === "" || role === "employee";
     };
     ctrl.getAccounts();
 }]);

@@ -21,7 +21,7 @@
                     <td>
                         <div ng-hide="ctrl.inEdit[$index]">{{userAccount.login}}</div>
                         <div ng-show="ctrl.inEdit[$index]">
-                            <input class="form-control" type="text" ng-model="ctrl.newLogin" required="" placeholder="{{userAccount.login}}">
+                            <input class="form-control" type="text" ng-model="ctrl.editedLogin[$index]" required="" placeholder="{{userAccount.login}}">
                         </div>
                     </td>
                     <td>
@@ -30,7 +30,8 @@
                     <td>
                         <div ng-hide="ctrl.inEdit[$index]">{{userAccount.limit}}</div>
                         <div ng-show="ctrl.inEdit[$index]">
-                            <input class="form-control" type="number" ng-model="ctrl.newLimit" required="" placeholder="{{userAccount.limit}}">
+                            <input class="form-control" type="number" ng-model="ctrl.editedLimit[$index]"
+                                   required="" placeholder="{{userAccount.limit}}" ng-disabled="ctrl.disableLimit(userAccount.role)">
                         </div>
                     </td>
                     <td>
