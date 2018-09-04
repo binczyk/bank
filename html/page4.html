@@ -81,7 +81,7 @@
                                 </select>
                                 <label for="limit">Limit</label>
                                 <input id="limit" type="number" ng-model="ctrl.newLimit" class="form-control" placeholder="Available only for client"
-                                       ng-disabled="ctrl.disableLimit()"/>
+                                       ng-disabled="ctrl.disableLimit(ctrl.newRole)"/>
 
                             </div>
                         </div>

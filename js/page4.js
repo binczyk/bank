@@ -112,10 +112,6 @@ app.controller("Page4", ["$http", "common", "globals", function ($http, common, 
                 });
     };
 
-    ctrl.disableLimit = function () {
-        return ctrl.newRole === "" || ctrl.newRole === "employee";
-    };
-
     ctrl.disableLimit = function (role) {
         return role === "" || role === "employee";
     };
