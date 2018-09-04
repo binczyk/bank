@@ -10,6 +10,8 @@ app.controller("Page4", ["$http", "common", "globals", function ($http, common, 
 
     ctrl.newLogin = "";
     ctrl.newLimit = "";
+    ctrl.newPassword = "";
+    ctrl.newRole = "";
 
     ctrl.inEdit = [];
 
@@ -17,6 +19,14 @@ app.controller("Page4", ["$http", "common", "globals", function ($http, common, 
         $http.get('/accounts/' + ctrl.nSkip + "/" + ctrl.nLimit).then(
             function (rep) {
                 ctrl.account = rep.data;
+                $http.get("/accounts/").then(
+                    function (rep) {
+                        ctrl.numberOfUsers = rep.data.length;
+                    },
+                    function (err) {
+                        ctrl.numberOfUsers = 0;
+                    }
+                );
             },
             function (err) {
                 ctrl.account = [];
@@ -25,7 +35,7 @@ app.controller("Page4", ["$http", "common", "globals", function ($http, common, 
     };
 
     ctrl.incLimit = function () {
-        ctrl.nLimit++;
+        ctrl.nLimit = ctrl.nLimit + 5;
         ctrl.getAccounts();
     };
 
@@ -72,7 +82,36 @@ app.controller("Page4", ["$http", "common", "globals", function ($http, common, 
         ctrl.inEdit[index] = false;
         ctrl.newLimit = "";
         ctrl.newLogin = "";
-    }
+    };
 
+    ctrl.openDialog = function () {
+        $("#createNewUserDialog").modal();
+    };
+
+    ctrl.create = function () {
+        $http.post("/account/create/", {
+            newLogin: ctrl.newLogin,
+            newPassword: ctrl.newPassword,
+            newRole: ctrl.newRole,
+            newLimit: ctrl.newLimit
+        }).then(function (rep) {
+                    ctrl.getAccounts();
+                    globals.alert.message = 'New user has been created: ' + ctrl.newLogin;
+                    globals.alert.type = 'success';
+                    $("#createNewUserDialog").modal("hide");
+                    ctrl.newLogin = "";
+                    ctrl.newLimit = "";
+                    ctrl.newPassword = "";
+                    ctrl.newRole = "";
+                },
+                function (err) {
+                    globals.alert.type = 'danger';
+                    globals.alert.message = 'Operation failed! ' + err.data.err;
+                });
+    };
+
+    ctrl.disableLimit = function () {
+        return ctrl.newRole === "" || ctrl.newRole === "employee";
+    };
     ctrl.getAccounts();
 }]);

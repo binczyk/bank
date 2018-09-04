@@ -44,7 +44,8 @@
                     </td>
                 </tr>
             </table>
-
+            <button class="btn btn-primary glyphicon glyphicon-option-horizontal" ng-click="ctrl.incLimit()"
+                    ng-disabled="ctrl.nSkip + ctrl.nLimit >= ctrl.numberOfUsers"></button>
         </div>
 
         <div class="panel-footer text-center">
@@ -53,7 +54,47 @@
 
 
     </div>
-    <button class="btn btn-primary">Add new user</button>
+    <button class="btn btn-primary" ng-click="ctrl.openDialog()">Add new user</button>
+
+    <div id="createNewUserDialog" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Create new user
+                        <small><span ng-show="ctrl.loginMsg" ng-bind="ctrl.loginMsg" class="left text-left alert alert-danger" role="alert"/></small>
+                    </h4>
+                </div>
+                <form name="createNewUserForm" class="ng-pristine ng-untouched ng-valid"><!--ng-submit="ctrl.validateCredentials()"-->
+                    <div class="modal-body">
+                        <div class="panel panel-default">
+                            <div class="form-group panel-body">
+                                <label for="login">Login</label>
+                                <input id="login" type="text" ng-model="ctrl.newLogin" class="form-control" required="" placeholder="username" autofocus="" ng-required=""/>
+                                <label for="password">Password</label>
+                                <input id="password" type="password" ng-model="ctrl.newPassword" class="form-control" placeholder="password" ng-required=""/>
+                                <label for="role">Role</label>
+                                <select id="role" ng-model="ctrl.newRole" class="form-control" ng-required="">
+                                    <option value="client">Client</option>
+                                    <option value="employee">Employee</option>
+                                </select>
+                                <label for="limit">Limit</label>
+                                <input id="limit" type="number" ng-model="ctrl.newLimit" class="form-control" placeholder="Available only for client"
+                                       ng-disabled="ctrl.disableLimit()"/>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+
+                        <button type="submit" class="btn btn-primary glyphicon glyphicon-save" ng-click="ctrl.create()"
+                                ng-disabled="createNewUserForm.$invalid"/>
+                        <button type="button" class="btn btn-default glyphicon glyphicon-remove" data-dismiss="modal"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 

@@ -233,6 +233,65 @@ httpServer.on('request', function (req, rep) {
 
                           break;
 
+                      case  '/account/create/':
+                          if (!session || !sessions[session] || !sessions[session].login || !sessions[session].account) {
+                              rep.writeHead(401, 'Auth required', {"Content-type": "application/json"});
+                              rep.end(JSON.stringify({error: 'Not logged in'}));
+                              break;
+                          }
+
+                          var data = '';
+                          req.setEncoding('utf8');
+                          req.on('data', function (portion) {
+                              data += portion;
+                          }).on('end', function () {
+                              if (debugLog) {
+                                  console.log("Create: " + data);
+                              }
+                              var newUser = null;
+                              try {
+                                  newUser = JSON.parse(data);
+                              } catch (ex) {
+                                  rep.writeHead(406, 'Not acceptable', {"Content-type": "application/json"});
+                                  rep.end(JSON.stringify({err: "Data corrupted"}));
+                                  return;
+                              }
+
+                              accounts.findOne({login: newUser.newLogin}, function (err, doc) {
+                                  if (doc) {
+                                      rep.writeHead(406, 'Not acceptable', {"Content-type": "application/json "});
+                                      rep.end(JSON.stringify({err: "User with login " + newUser.newLogin + " exist"}));
+                                      return;
+                                  } else {
+                                      if (!newUser.newLogin || !newUser.newPassword || !newUser.newRole) {
+                                          rep.writeHead(406, 'Not acceptable', {"Content-type": "application/json"});
+                                          rep.end(JSON.stringify({err: "Those fields are always required: login, password, role!"}));
+                                          return;
+                                      } else if (newUser.newRole === "client" && (newUser.newLimit === null || newUser.newLimit === "")) {
+                                          rep.writeHead(406, 'Not acceptable', {"Content-type": "application/json"});
+                                          rep.end(JSON.stringify({err: "Client must have limit!"}));
+                                          return;
+                                      }
+                                      try {
+                                          accounts.insertOne({
+                                                                 login: newUser.newLogin,
+                                                                 password: newUser.newPassword,
+                                                                 role: newUser.newRole,
+                                                                 limit: newUser.newLimit
+                                                             });
+                                          rep.writeHead(200, 'OK', {"Content-type": "application/json"});
+                                          rep.end(JSON.stringify({status: "ok"}));
+                                      } catch (ex) {
+                                          rep.writeHead(500, 'Not acceptable', {"Content-type": "application/json"});
+                                          rep.end(JSON.stringify({err: "Internal server error"}));
+                                          return;
+                                      }
+                                  }
+                              });
+                          });
+
+                          break;
+
                       case
                       '/account':
 
