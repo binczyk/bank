@@ -75,7 +75,7 @@
                                 <label for="password">Password</label>
                                 <input id="password" type="password" ng-model="ctrl.newPassword" class="form-control" placeholder="password" ng-required=""/>
                                 <label for="role">Role</label>
-                                <select id="role" ng-model="ctrl.newRole" class="form-control" ng-required="">
+                                <select id="role" ng-model="ctrl.newRole" class="form-control" ng-required="" ng-change="ctrl.removeLimit()">
                                     <option value="client">Client</option>
                                     <option value="employee">Employee</option>
                                 </select>

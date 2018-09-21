@@ -91,6 +91,9 @@ app.controller("Page4", ["$http", "common", "globals", function ($http, common, 
     };
 
     ctrl.create = function () {
+        if (role === "" || role === "employee") {
+            ctrl.newLimit = "";
+        }
         $http.post("/account/create/", {
             newLogin: ctrl.newLogin,
             newPassword: ctrl.newPassword,
@@ -114,6 +117,10 @@ app.controller("Page4", ["$http", "common", "globals", function ($http, common, 
 
     ctrl.disableLimit = function (role) {
         return role === "" || role === "employee";
+    };
+
+    ctrl.removeLimit = function () {
+        ctrl.newLimit = "";
     };
     ctrl.getAccounts();
 }]);
